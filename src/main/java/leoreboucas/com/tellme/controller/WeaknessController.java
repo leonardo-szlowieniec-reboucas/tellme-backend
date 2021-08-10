@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/weaknesses")
 public class WeaknessController {
-    private WeaknessService weaknessService;
+    private WeaknessService weaknessService ;
 
     public WeaknessController(WeaknessService weaknessService) {
         this.weaknessService = weaknessService;
@@ -21,7 +21,7 @@ public class WeaknessController {
     public ResponseEntity<Weakness> saveWeakness(@RequestBody Weakness weakness) {
         return new ResponseEntity<Weakness>(weaknessService.saveWeakness(weakness), HttpStatus.CREATED);
     }
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin
     @GetMapping
     public List<Weakness> getAllWeaknesses() {
         return weaknessService.getAllWeaknesses();
