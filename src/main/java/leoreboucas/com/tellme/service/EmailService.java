@@ -9,4 +9,5 @@ public interface EmailService {
     void sendEmail();
     void sendEmail(String emailTo);
     void sendEmail(Adviser adviser, Advised advised);
+    void sendEmail(Advised advised);
 }

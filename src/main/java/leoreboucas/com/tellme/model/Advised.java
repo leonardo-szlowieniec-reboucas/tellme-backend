@@ -3,7 +3,6 @@ package leoreboucas.com.tellme.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,8 +14,8 @@ public class Advised {
     private Long id;
     private String name;
     private String description;
+    private String email;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_advised", referencedColumnName = "id")
+    @OneToMany(mappedBy = "advised", cascade = CascadeType.PERSIST)
     private List<Adviser> advisers;
 }

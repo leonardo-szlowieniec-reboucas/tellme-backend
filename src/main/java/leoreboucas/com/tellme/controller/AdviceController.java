@@ -29,8 +29,7 @@ public class AdviceController {
     @CrossOrigin
     @PostMapping("{idAdviser}")
     public ResponseEntity<Advice> saveAdvice(@PathVariable("idAdviser") Long idAdviser, @RequestBody Advice advice) {
-        advice.setIdAdvised(idAdviser);
-        return new ResponseEntity<Advice>(adviceService.saveAdvice(advice),HttpStatus.CREATED);
+        return new ResponseEntity<Advice>(adviceService.saveAdvice(idAdviser, advice),HttpStatus.CREATED);
     }
 
     @CrossOrigin

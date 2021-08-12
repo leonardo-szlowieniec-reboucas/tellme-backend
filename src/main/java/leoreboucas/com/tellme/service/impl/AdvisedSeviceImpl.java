@@ -35,10 +35,10 @@ public class AdvisedSeviceImpl implements AdvisedService {
         return advised.get();
     }
 
-    private void sendEmail(List<Adviser> advisers) {
-        for (Adviser adviser : advisers)
-            emailService.sendEmail(adviser.getEmail());
-    }
+//    private void sendEmail(List<Adviser> advisers) {
+//        for (Adviser adviser : advisers)
+//            emailService.sendEmail(adviser.getEmail());
+//    }
 
     private void sendEmail(Advised advised) {
         for (Adviser adviser : advised.getAdvisers())

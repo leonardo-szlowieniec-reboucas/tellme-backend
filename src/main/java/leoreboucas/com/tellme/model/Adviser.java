@@ -1,5 +1,6 @@
 package leoreboucas.com.tellme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,10 +15,8 @@ public class Adviser {
     private String email;
     private Boolean isDone;
 
-    public Adviser(String email) {
-        this.email = email;
-    }
-
-    public Adviser() {
-    }
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="id_advised", nullable=false)
+    private Advised advised;
 }

@@ -45,7 +45,18 @@ public class EmailServiceImpl implements EmailService {
         message.setFrom("leonardo1209@gmail.com");
         message.setTo(adviser.getEmail());
         message.setSubject("Tellme - Feedback for " + advised.getName());
-        message.setText("http://localhost:4200/save-advice/"+advised.getId());
+        message.setText("http://localhost:4200/save-advice/"+adviser.getId());
+
+        javaMailSender.send(message);
+    }
+
+    public void sendEmail(Advised advised) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setFrom("leonardo1209@gmail.com");
+        message.setTo(advised.getEmail());
+        message.setSubject("Tellme - Results for " + advised.getName());
+        message.setText("http://localhost:4200/advice-list/"+advised.getId());
 
         javaMailSender.send(message);
     }

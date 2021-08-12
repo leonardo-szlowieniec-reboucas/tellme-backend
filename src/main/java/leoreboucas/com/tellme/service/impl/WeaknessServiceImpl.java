@@ -23,7 +23,7 @@ public class WeaknessServiceImpl implements WeaknessService {
 
     @Override
     public List<Weakness> getAllWeaknesses() {
-        return weaknessRepository.findAll();
+        return null;//weaknessRepository.findAll();
     }
 
     @Override
