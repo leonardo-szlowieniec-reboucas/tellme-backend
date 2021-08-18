@@ -6,43 +6,41 @@ import leoreboucas.com.tellme.repository.AdviceRepository;
 import leoreboucas.com.tellme.repository.AdvisedRepository;
 import leoreboucas.com.tellme.repository.AdviserRepository;
 import leoreboucas.com.tellme.service.AdviceService;
-import leoreboucas.com.tellme.service.AdviserService;
 import leoreboucas.com.tellme.service.EmailService;
-import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AdviceServiceImpl implements AdviceService {
+    @Autowired
     private AdviceRepository adviceRepository;
+    @Autowired
     private AdviserRepository adviserRepository;
+    @Autowired
     private AdvisedRepository advisedRepository;
+    @Autowired
     private EmailService emailService;
-
-    public AdviceServiceImpl(AdviceRepository adviceRepository, AdviserRepository adviserRepository, AdvisedRepository advisedRepository, EmailService emailService) {
-        this.adviceRepository = adviceRepository;
-        this.adviserRepository = adviserRepository;
-        this.advisedRepository = advisedRepository;
-        this.emailService = emailService;
-    }
 
     @Override
     public List<Advice> findByIdAdvised(Long idAdvised) {
+        //TO DO: add validations
+        //TO DO: handle exceptions
+        //TO DO: add log
         if (!adviserRepository.existsByAdvisedAndIsDone(advisedRepository.getById(idAdvised), false))
             return adviceRepository.findByIdAdvised(idAdvised);
         return new ArrayList<>();
     }
 
-    @Override
-    public Advice saveAdvice(Advice advice) {
-        return adviceRepository.save(advice);
-    }
-
+    @Transactional
     @Override
     public Advice saveAdvice(Long idAdviser, Advice advice) {
+        //TO DO: add validation
+        //TO DO: handle exception
+        //TO DO: add log
         Adviser adviser = adviserRepository.getById(idAdviser);
         if (!adviser.getIsDone()) {
             adviser.setIsDone(true);

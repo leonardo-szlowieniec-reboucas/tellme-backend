@@ -1,5 +1,7 @@
 package leoreboucas.com.tellme.service;
 
+import leoreboucas.com.tellme.model.Adviser;
+
 public interface AdviserService {
-    boolean isDone(Long idAdviser);
+    Adviser findById(Long id);
 }

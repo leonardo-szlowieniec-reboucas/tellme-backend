@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface AdviceService {
     List<Advice> findByIdAdvised(Long idAdvised);
-    Advice saveAdvice(Advice advice);
     Advice saveAdvice(Long idAdviser, Advice advice);
 }
