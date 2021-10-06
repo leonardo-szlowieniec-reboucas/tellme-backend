@@ -13,10 +13,11 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     JavaMailSender javaMailSender;
 
-    public void sendEmail(Adviser adviser, Advised advised) {
-        //TO DO: add validation
-        //TO DO: handle exception
-        //TO DO: add log
+//    public void sendEmail(Adviser adviser, Advised advised) {
+    public void emailAdviser(Adviser adviser, Advised advised) {
+        //TODO: add validation
+        //TODO: handle exception
+        //TODO: add log
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom("leonardo1209@gmail.com");
@@ -27,10 +28,12 @@ public class EmailServiceImpl implements EmailService {
         javaMailSender.send(message);
     }
 
-    public void sendEmail(Advised advised) {
-        //TO DO: add validation
-        //TO DO: handle exception
-        //TO DO: add log
+//    public void sendEmail(Advised advised) {
+    @Override
+    public void emailResult(Advised advised) {
+        //TODO: add validation
+        //TODO: handle exception
+        //TODO: add log
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom("leonardo1209@gmail.com");

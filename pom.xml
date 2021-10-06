@@ -59,7 +59,7 @@
 			<artifactId>commons-text</artifactId>
 			<version>1.9</version>
 		</dependency>
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

@@ -7,9 +7,8 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
-@Table
 public class Advice {
-    //TO DO: add dateCreated... length...
+    //TODO: add dateCreated... validation...
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
