@@ -1,45 +1,45 @@
 package leoreboucas.com.tellme.service.impl;
 
-import leoreboucas.com.tellme.model.Advised;
-import leoreboucas.com.tellme.model.Adviser;
+import leoreboucas.com.tellme.entity.Respondent;
+import leoreboucas.com.tellme.entity.Survey;
 import leoreboucas.com.tellme.service.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
-    @Autowired
-    JavaMailSender javaMailSender;
 
-//    public void sendEmail(Adviser adviser, Advised advised) {
-    public void emailAdviser(Adviser adviser, Advised advised) {
+    private final JavaMailSender javaMailSender;
+
+    public void emailRespondent(Respondent respondent, Survey survey) {
         //TODO: add validation
         //TODO: handle exception
         //TODO: add log
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom("leonardo1209@gmail.com");
-        message.setTo(adviser.getEmail());
-        message.setSubject("Tellme - Feedback for " + advised.getName());
-        message.setText("http://localhost:4200/give-advice/"+adviser.getId());
+        message.setTo(respondent.getEmail());
+        message.setSubject("Tellme - Survey for " + survey.getTitle());
+//REMOVE        message.setText("http://localhost:4200/to-answer/"+ respondent.getId());
+        message.setText("http://localhost:4200/to-answer/surveys/" + survey.getId() + "/respondents/" + respondent.getId());
 
         javaMailSender.send(message);
     }
 
-//    public void sendEmail(Advised advised) {
     @Override
-    public void emailResult(Advised advised) {
+    public void emailResult(Survey survey) {
         //TODO: add validation
         //TODO: handle exception
         //TODO: add log
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom("leonardo1209@gmail.com");
-        message.setTo(advised.getEmail());
-        message.setSubject("Tellme - Advice for " + advised.getName());
-        message.setText("http://localhost:4200/list-advice/"+advised.getId());
+        message.setTo(survey.getEmail());
+        message.setSubject("Tellme - Survey results for " + survey.getTitle());
+        message.setText("http://localhost:4200/list-answer/"+ survey.getId());
 
         javaMailSender.send(message);
     }

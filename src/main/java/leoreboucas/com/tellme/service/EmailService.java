@@ -1,9 +1,9 @@
 package leoreboucas.com.tellme.service;
 
-import leoreboucas.com.tellme.model.Advised;
-import leoreboucas.com.tellme.model.Adviser;
+import leoreboucas.com.tellme.entity.Respondent;
+import leoreboucas.com.tellme.entity.Survey;
 
 public interface EmailService {
-    void emailAdviser(Adviser adviser, Advised advised);
-    void emailResult(Advised advised);
+    void emailRespondent(Respondent respondent, Survey survey);
+    void emailResult(Survey survey);
 }

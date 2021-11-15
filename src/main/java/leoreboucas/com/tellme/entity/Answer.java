@@ -1,4 +1,4 @@
-package leoreboucas.com.tellme.model;
+package leoreboucas.com.tellme.entity;
 
 import lombok.Data;
 
@@ -7,13 +7,12 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
-public class Advice {
-    //TODO: add dateCreated... validation...
+public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private Long idAdvised;
+    private Long surveyId;
     @NotNull
     private String description;
 }
