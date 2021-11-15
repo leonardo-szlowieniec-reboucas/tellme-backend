@@ -1,4 +1,4 @@
-package leoreboucas.com.tellme.service.impl;
+package leoreboucas.com.tellme.service;
 
 import leoreboucas.com.tellme.entity.Answer;
 import leoreboucas.com.tellme.entity.Survey;
@@ -7,10 +7,7 @@ import leoreboucas.com.tellme.exception.ResourceNotFoundException;
 import leoreboucas.com.tellme.repository.AnswerRepository;
 import leoreboucas.com.tellme.repository.SurveyRepository;
 import leoreboucas.com.tellme.repository.RespondentRepository;
-import leoreboucas.com.tellme.service.SurveyService;
-import leoreboucas.com.tellme.service.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +29,7 @@ public class SurveyServiceImpl implements SurveyService {
         survey = setSurveyInRespondent(survey);
         survey = surveyRepository.save(survey);
         sendEmail(survey);
+
         return survey;
     }
 

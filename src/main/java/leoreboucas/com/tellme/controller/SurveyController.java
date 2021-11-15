@@ -35,14 +35,6 @@ public class SurveyController {
         return mapper.surveyToSurveyInfoDto(survey);
     }
 
-    @GetMapping("{id}/answers")
-    public List<AnswerDto> getAnswersBySurveyId(@PathVariable Long id) {
-
-        return mapper.answerToAnswerDto(
-                surveyService.findAnswersBySurveyId(id)
-        );
-    }
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/{surveyId}/respondents/{respondentId}/answers")
     public void saveAnswer(@PathVariable Long surveyId, @PathVariable Long respondentId, @Valid @RequestBody AnswerDto answerDto) {
@@ -51,6 +43,14 @@ public class SurveyController {
                 surveyId,
                 respondentId,
                 mapper.answerDtoToAnswer(answerDto)
+        );
+    }
+
+    @GetMapping("{id}/answers")
+    public List<AnswerDto> getAnswersBySurveyId(@PathVariable Long id) {
+
+        return mapper.answerToAnswerDto(
+                surveyService.findAnswersBySurveyId(id)
         );
     }
 }

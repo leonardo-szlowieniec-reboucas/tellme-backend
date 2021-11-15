@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RespondentRepository extends JpaRepository<Respondent, Long> {
     Boolean existsBySurveyAndIsDone(Survey survey, Boolean isDone);
-//    Boolean existsByIdAdvisedAndIsDone(Long idAdvised, Boolean isDone);
 }
