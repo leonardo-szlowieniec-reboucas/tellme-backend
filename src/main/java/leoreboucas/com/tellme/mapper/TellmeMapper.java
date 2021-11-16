@@ -12,6 +12,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TellmeMapper {
+
     @Mapping(target = "title", source = "name")
     Survey surveyDtoToSurvey(SurveyDto surveyDto);
 
@@ -21,4 +22,7 @@ public interface TellmeMapper {
     List<AnswerDto> answerToAnswerDto(List<Answer> answers);
 
     Answer answerDtoToAnswer(AnswerDto answerDto);
+
+    @Mapping(source = "title", target = "name")
+    SurveyDto surveyToSurveyDto(Survey survey);
 }

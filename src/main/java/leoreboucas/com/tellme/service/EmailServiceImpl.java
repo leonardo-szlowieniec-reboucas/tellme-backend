@@ -1,5 +1,7 @@
 package leoreboucas.com.tellme.service;
 
+import leoreboucas.com.tellme.dto.RespondentDto;
+import leoreboucas.com.tellme.dto.SurveyDto;
 import leoreboucas.com.tellme.entity.Respondent;
 import leoreboucas.com.tellme.entity.Survey;
 import leoreboucas.com.tellme.service.EmailService;
@@ -21,6 +23,18 @@ public class EmailServiceImpl implements EmailService {
         message.setFrom("leonardo1209@gmail.com");
         message.setTo(respondent.getEmail());
         message.setSubject("Tellme - Survey for " + survey.getTitle());
+        message.setText("http://localhost:4200/to-answer/" + survey.getId() + "/" + respondent.getId());
+
+        javaMailSender.send(message);
+    }
+
+    public void emailRespondent(RespondentDto respondent, SurveyDto survey) {
+        //TODO: add log
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setFrom("leonardo1209@gmail.com");
+        message.setTo(respondent.getEmail());
+        message.setSubject("Tellme - Survey for " + survey.getName());
         message.setText("http://localhost:4200/to-answer/" + survey.getId() + "/" + respondent.getId());
 
         javaMailSender.send(message);

@@ -2,6 +2,7 @@ package leoreboucas.com.tellme.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +11,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class SurveyDto {
+    private Long id;
     @NotBlank(message = "Title is mandatory")
     private String name;
     @NotBlank(message = "Question is mandatory")

@@ -4,6 +4,8 @@ import leoreboucas.com.tellme.entity.Answer;
 import leoreboucas.com.tellme.entity.Survey;
 import leoreboucas.com.tellme.entity.Respondent;
 import leoreboucas.com.tellme.exception.ResourceNotFoundException;
+import leoreboucas.com.tellme.mapper.TellmeMapper;
+import leoreboucas.com.tellme.messaging.Producer;
 import leoreboucas.com.tellme.repository.AnswerRepository;
 import leoreboucas.com.tellme.repository.SurveyRepository;
 import leoreboucas.com.tellme.repository.RespondentRepository;
@@ -21,6 +23,8 @@ public class SurveyServiceImpl implements SurveyService {
     private final EmailService emailService;
     private final AnswerRepository answerRepository;
     private final RespondentRepository respondentRepository;
+    private final Producer producer;
+    private final TellmeMapper mapper;
 
     @Transactional
     @Override
@@ -28,7 +32,11 @@ public class SurveyServiceImpl implements SurveyService {
         //TODO: add log
         survey = setSurveyInRespondent(survey);
         survey = surveyRepository.save(survey);
-        sendEmail(survey);
+
+
+        producer.publishToTopic(mapper.surveyToSurveyDto(survey));
+//        producer.publishToTopic("SEND EMAIL PLEASE");
+        //sendEmail(survey);
 
         return survey;
     }
