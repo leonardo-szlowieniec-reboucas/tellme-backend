@@ -2,54 +2,47 @@ package leoreboucas.com.tellme.service;
 
 import leoreboucas.com.tellme.dto.RespondentDto;
 import leoreboucas.com.tellme.dto.SurveyDto;
-import leoreboucas.com.tellme.entity.Respondent;
-import leoreboucas.com.tellme.entity.Survey;
-import leoreboucas.com.tellme.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
 
-    public void emailRespondent(Respondent respondent, Survey survey) {
-        //TODO: add log
+   @Override
+    public void emailRespondents(SurveyDto surveyDto) {
+
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom("leonardo1209@gmail.com");
-        message.setTo(respondent.getEmail());
-        message.setSubject("Tellme - Survey for " + survey.getTitle());
-        message.setText("http://localhost:4200/to-answer/" + survey.getId() + "/" + respondent.getId());
+        message.setSubject("Tellme - Survey for " + surveyDto.getName());
 
-        javaMailSender.send(message);
-    }
+        for (RespondentDto respondentDto : surveyDto.getRespondents()) {
+            message.setTo(respondentDto.getEmail());
+            message.setText("http://localhost:4200/to-answer/" + surveyDto.getId() + "/" + respondentDto.getId());
 
-    public void emailRespondent(RespondentDto respondent, SurveyDto survey) {
-        //TODO: add log
-        SimpleMailMessage message = new SimpleMailMessage();
-
-        message.setFrom("leonardo1209@gmail.com");
-        message.setTo(respondent.getEmail());
-        message.setSubject("Tellme - Survey for " + survey.getName());
-        message.setText("http://localhost:4200/to-answer/" + survey.getId() + "/" + respondent.getId());
-
-        javaMailSender.send(message);
+            javaMailSender.send(message);
+            log.info("Email sent to surveyId: " + surveyDto.getId() + " respondentId: " +  respondentDto.getId());
+        }
     }
 
     @Override
-    public void emailResult(Survey survey) {
-        //TODO: add log
+    public void emailResult(SurveyDto surveyDto) {
+
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom("leonardo1209@gmail.com");
-        message.setTo(survey.getEmail());
-        message.setSubject("Tellme - Survey results for " + survey.getTitle());
-        message.setText("http://localhost:4200/answers/"+ survey.getId());
+        message.setTo(surveyDto.getEmail());
+        message.setSubject("Tellme - Survey results for " + surveyDto.getName());
+        message.setText("http://localhost:4200/answers/"+ surveyDto.getId());
 
         javaMailSender.send(message);
+        log.info("Result email sent to surveyId: " + surveyDto.getId());
     }
 }

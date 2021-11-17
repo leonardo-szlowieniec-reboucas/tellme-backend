@@ -10,6 +10,7 @@ import leoreboucas.com.tellme.repository.AnswerRepository;
 import leoreboucas.com.tellme.repository.SurveyRepository;
 import leoreboucas.com.tellme.repository.RespondentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +19,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SurveyServiceImpl implements SurveyService {
     private final SurveyRepository surveyRepository;
-    private final EmailService emailService;
     private final AnswerRepository answerRepository;
     private final RespondentRepository respondentRepository;
     private final Producer producer;
@@ -29,14 +30,12 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional
     @Override
     public Survey saveSurvey(Survey survey) {
-        //TODO: add log
+
         survey = setSurveyInRespondent(survey);
         survey = surveyRepository.save(survey);
+        log.info("Created surveyId: " + survey.getId());
 
-
-        producer.publishToTopic(mapper.surveyToSurveyDto(survey));
-//        producer.publishToTopic("SEND EMAIL PLEASE");
-        //sendEmail(survey);
+        producer.publishEmailRespondents(mapper.surveyToSurveyDto(survey));
 
         return survey;
     }
@@ -45,40 +44,54 @@ public class SurveyServiceImpl implements SurveyService {
     public Survey findById(Long id) {
 
         return surveyRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id  : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: " + id + " (findById)"));
     }
+
+//    .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: " + id + " " +
+//            StackWalker.getInstance().walk(frames -> frames
+//            .findFirst()
+//            .map(StackWalker.StackFrame::getMethodName))
+//            ));
+
 
     @Override
     public List<Answer> findAnswersBySurveyId(Long surveyId) {
 
         Survey survey = surveyRepository.findById(surveyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id: "+ surveyId));
+                .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: "+ surveyId + " (findAnswersBySurveyId)"));
 
         // Return answers only if all respondent answered it
         if (!respondentRepository.existsBySurveyAndIsDone(survey, false))
             return answerRepository.findBySurveyId(surveyId);
+
         return new ArrayList<>();
     }
 
     @Transactional
-//    @Override
+    @Override
     public void saveAnswer(Long surveyId, Long respondentId, Answer answer) {
 
         Respondent respondent = respondentRepository.findById(respondentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Respondent not found with id: " + respondentId));
-        if (!respondent.getIsDone()) {
-            Survey survey = surveyRepository.findById(surveyId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id: " + surveyId));
+                .orElseThrow(() -> new ResourceNotFoundException("Respondent not found with respondentId: " + respondentId + " (saveAnswer)"));
 
-            answer.setSurveyId(survey.getId());
-            answerRepository.save(answer);
+        if (!respondent.getIsDone()) {
+
+            Survey survey = surveyRepository.findById(surveyId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: " + surveyId + " (saveAnswer)"));
 
             respondent.setIsDone(true);
             respondentRepository.save(respondent);
+            // Do not log who gave the answer to keep them anonymous
+            log.info("A respondent answered");
 
-            //Send final email if all respondents have given answer.
+            answer.setSurveyId(survey.getId());
+            //TODO to confirm if I need to create a new instance of answer or if I can used the parameter to receive the return.
+            answer = answerRepository.save(answer);
+            log.info("Saved answer for surveyId: " + answer.getSurveyId() + " and answerId: " + answer.getId());
+
+            //Send result email if all respondents answered.
             if (!respondentRepository.existsBySurveyAndIsDone(survey, false))
-                emailService.emailResult(survey);
+                producer.publishEmailResult(mapper.surveyToSurveyDto(survey));
         }
     }
 
@@ -98,10 +111,5 @@ public class SurveyServiceImpl implements SurveyService {
         survey.setRespondents(respondents);
 
         return survey;
-    }
-
-    private void sendEmail(Survey survey) {
-        for (Respondent respondent : survey.getRespondents())
-            emailService.emailRespondent(respondent, survey);
     }
 }

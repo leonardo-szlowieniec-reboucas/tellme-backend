@@ -1,35 +1,30 @@
 package leoreboucas.com.tellme.messaging;
 
 import leoreboucas.com.tellme.dto.SurveyDto;
-import leoreboucas.com.tellme.entity.Respondent;
-import leoreboucas.com.tellme.entity.Survey;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class Producer {
-//    private static final String topic = "mytopic";
-    private static final String topicSurvey = "sendEmail";
 
-//    @Autowired
-//    private KafkaTemplate<String, String> kafkaTemplate;
+    private static final String emailRespondentsTopic = "emailRespondentsTopic";
+    private static final String emailResultTopic = "emailResultTopic";
     @Autowired
-    private KafkaTemplate<String, SurveyDto> kafkaTemplateSurvey;
+    private KafkaTemplate<String, SurveyDto> kafkaTemplate;
 
-//    public void publishToTopic(String message) {
-//
-//        System.out.println("published: " + topic);
-//
-//        this.kafkaTemplate.send(topic, message);
-//    }
+    public void publishEmailRespondents(SurveyDto surveyDto) {
 
-    public void publishToTopic(SurveyDto surveyDto) {
-
-        System.out.println(">>>> publish: " + topicSurvey);
-
-        this.kafkaTemplateSurvey.send(topicSurvey, surveyDto);
+        this.kafkaTemplate.send(emailRespondentsTopic, surveyDto);
+        log.info("Published emailRespondentsTopic for surveyId: " + surveyDto.getId()
+                + " with " + surveyDto.getRespondents().size() + " respondents");
     }
 
+    public void publishEmailResult(SurveyDto surveyDto) {
 
+        this.kafkaTemplate.send(emailResultTopic, surveyDto);
+        log.info("Published emailResultTopic for surveyId: " + surveyDto.getId());
+    }
 }

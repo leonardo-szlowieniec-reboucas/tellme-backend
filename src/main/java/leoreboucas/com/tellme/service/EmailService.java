@@ -6,7 +6,6 @@ import leoreboucas.com.tellme.entity.Respondent;
 import leoreboucas.com.tellme.entity.Survey;
 
 public interface EmailService {
-    void emailRespondent(Respondent respondent, Survey survey);
-    void emailRespondent(RespondentDto respondent, SurveyDto survey);
-    void emailResult(Survey survey);
+    void emailRespondents(SurveyDto surveyDto);
+    void emailResult(SurveyDto surveyDto);
 }

@@ -10,5 +10,4 @@ public interface SurveyService {
     Survey findById(Long id);
     List<Answer> findAnswersBySurveyId(Long surveyId);
     void saveAnswer(Long surveyId, Long respondentId, Answer answer);
-//    ResponseEntity<Advised> findById(Long id);
 }
