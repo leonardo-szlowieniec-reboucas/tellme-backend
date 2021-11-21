@@ -1,5 +1,6 @@
 package leoreboucas.com.tellme.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import leoreboucas.com.tellme.dto.*;
 import leoreboucas.com.tellme.mapper.TellmeMapper;
 import leoreboucas.com.tellme.entity.Survey;
@@ -20,14 +21,16 @@ public class SurveyController {
     private final SurveyService surveyService;
     private final TellmeMapper mapper;
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "create a survey")
     @PostMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createSurvey(@Valid @RequestBody SurveyDto surveyDto) {
 
         surveyService.saveSurvey(
                 mapper.surveyDtoToSurvey(surveyDto));
     }
 
+    @Operation(summary = "get survey's information")
     @GetMapping("{id}")
     public SurveyInfoDto getSurveyInfoById(@PathVariable Long id) {
 
@@ -35,8 +38,9 @@ public class SurveyController {
                 surveyService.findById(id));
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "save an answer")
     @PostMapping("/{surveyId}/respondents/{respondentId}/answers")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void saveAnswer(
             @PathVariable Long surveyId,
             @PathVariable Long respondentId,
@@ -48,6 +52,7 @@ public class SurveyController {
                 mapper.answerDtoToAnswer(answerDto));
     }
 
+    @Operation(summary = "get answers of a specific survey")
     @GetMapping("{id}/answers")
     public List<AnswerDto> getAnswersBySurveyId(@PathVariable Long id) {
 

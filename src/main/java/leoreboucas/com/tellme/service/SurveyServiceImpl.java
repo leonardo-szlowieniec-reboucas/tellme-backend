@@ -35,7 +35,7 @@ public class SurveyServiceImpl implements SurveyService {
         survey = surveyRepository.save(survey);
         log.info("Created surveyId: " + survey.getId());
 
-        producer.publishEmailRespondents(mapper.surveyToSurveyDto(survey));
+        producer.publishEmailRespondents(mapper.surveyToSurveyMessageDto(survey));
 
         return survey;
     }
@@ -91,7 +91,7 @@ public class SurveyServiceImpl implements SurveyService {
 
             //Send result email if all respondents answered.
             if (!respondentRepository.existsBySurveyAndIsDone(survey, false))
-                producer.publishEmailResult(mapper.surveyToSurveyDto(survey));
+                producer.publishEmailResult(mapper.surveyToSurveyMessageDto(survey));
         }
     }
 
