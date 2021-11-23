@@ -47,13 +47,6 @@ public class SurveyServiceImpl implements SurveyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: " + id + " (findById)"));
     }
 
-//    .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: " + id + " " +
-//            StackWalker.getInstance().walk(frames -> frames
-//            .findFirst()
-//            .map(StackWalker.StackFrame::getMethodName))
-//            ));
-
-
     @Override
     public List<Answer> findAnswersBySurveyId(Long surveyId) {
 

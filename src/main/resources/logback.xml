@@ -1,33 +1,7 @@
 <configuration>
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>tellme.log</file>
-        <encoder>
-            <pattern>%date %-5level [%thread] {%logger{36}} %msg%n%rEx{full,java.lang.reflect.Method,
-            org.apache.catalina,
-            org.apache.tomcat,
-            org.apache.coyote,
-            javax,
-            java.util.concurrent,
-            java.lang.Thread,
-            org.springframework.aop,
-            org.springframework.boot.actuate,
-            org.springframework.security,
-            org.springframework.transaction,
-            org.springframework.web,
-            sun.reflect,
-            net.sf.cglib,
-            ByCGLIB
-            }
-            </pattern>
-        </encoder>
-    </appender>
-
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <withJansi>true</withJansi>
         <encoder>
-<!--            <pattern>%date %highlight(%level) %msg %cyan({%logger{36}}) %green([%thread]) %n%ex{short}</pattern>-->
-<!--            <pattern>%date %highlight(%level) %green([%thread]) %cyan({%logger{36}}) %msg %n%ex{short}</pattern>-->
-<!--            <pattern>%date %highlight(%-5level) %cyan([%thread]) %green({%logger{36}}) %msg %n%ex{short}</pattern>-->
             <pattern>%date %highlight(%-5level) %cyan([%thread]) %green({%logger{36}}) %msg%n%rEx{full,java.lang.reflect.Method,
                 org.apache.catalina,
                 org.apache.tomcat,
@@ -48,7 +22,32 @@
         </encoder>
     </appender>
     <root level="info">
-        <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
     </root>
+
+    <!--    <appender name="FILE" class="ch.qos.logback.core.FileAppender">-->
+    <!--        <file>tellmeWarning.log</file>-->
+    <!--        <encoder>-->
+    <!--            <pattern>%date %-5level [%thread] {%logger{36}} %msg%n%rEx{full,java.lang.reflect.Method,-->
+    <!--            org.apache.catalina,-->
+    <!--            org.apache.tomcat,-->
+    <!--            org.apache.coyote,-->
+    <!--            javax,-->
+    <!--            java.util.concurrent,-->
+    <!--            java.lang.Thread,-->
+    <!--            org.springframework.aop,-->
+    <!--            org.springframework.boot.actuate,-->
+    <!--            org.springframework.security,-->
+    <!--            org.springframework.transaction,-->
+    <!--            org.springframework.web,-->
+    <!--            sun.reflect,-->
+    <!--            net.sf.cglib,-->
+    <!--            ByCGLIB-->
+    <!--            }-->
+    <!--            </pattern>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+    <!--    <root level="war">-->
+    <!--        <appender-ref ref="FILE" />-->
+    <!--    </root>-->
 </configuration>
