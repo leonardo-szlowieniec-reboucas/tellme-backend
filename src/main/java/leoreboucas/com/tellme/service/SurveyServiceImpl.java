@@ -65,7 +65,6 @@ public class SurveyServiceImpl implements SurveyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Respondent not found with respondentId: " + respondentId + " (saveAnswer)"));
 
         if (!respondent.getIsDone()) {
-
             Survey survey = surveyRepository.findById(surveyId)
                     .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: " + surveyId + " (saveAnswer)"));
 
@@ -112,19 +111,6 @@ public class SurveyServiceImpl implements SurveyService {
         newSurvey.setEmail(survey.getEmail());
 
         return newSurvey;
-    }
-
-    //To set advised in adviser for Hibernate to be able to persist this relation
-    private Survey setSurveyInRespondentv02(Survey survey) {
-        List<Respondent> respondents = new ArrayList<>();
-
-        for (Respondent respondent : survey.getRespondents()) {
-            respondent.setSurvey(survey);
-            respondents.add(respondent);
-        }
-        survey.setRespondents(respondents);
-
-        return survey;
     }
 
     private Answer setSurveyIdInAnswer(Answer answer, Survey survey) {
