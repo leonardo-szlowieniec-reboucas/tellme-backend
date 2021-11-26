@@ -11,6 +11,7 @@ import leoreboucas.com.tellme.repository.SurveyRepository;
 import leoreboucas.com.tellme.repository.RespondentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +31,13 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional
     @Override
     public Survey saveSurvey(Survey survey) {
-        survey = setSurveyInRespondent(survey);
-        survey = surveyRepository.save(survey);
-        log.info("Created surveyId: " + survey.getId());
+        Survey surveyRespondents = setSurveyInRespondent(survey);
+        Survey surveySaved = surveyRepository.save(surveyRespondents);
+        log.info("Created surveyId: " + surveySaved.getId());
 
-        producer.publishEmailRespondents(mapper.surveyToSurveyMessageDto(survey));
+        producer.publishEmailRespondents(mapper.surveyToSurveyMessageDto(surveySaved));
 
-        return survey;
+        return surveySaved;
     }
 
     @Override
@@ -73,9 +74,9 @@ public class SurveyServiceImpl implements SurveyService {
             // Do not log who gave the answer to keep them anonymous
             log.info("A respondent answered");
 
-            answer.setSurveyId(survey.getId());
-            answer = answerRepository.save(answer);
-            log.info("Saved answer for surveyId: " + answer.getSurveyId() + " and answerId: " + answer.getId());
+            Answer answerSurvey = setSurveyIdInAnswer(answer, survey);
+            Answer answerSaved = answerRepository.save(answerSurvey);
+            log.info("Saved answer for surveyId: " + answerSaved.getSurveyId() + " and answerId: " + answerSaved.getId());
 
             //Send result email if all respondents answered.
             if (!respondentRepository.existsBySurveyAndIsDone(survey, false))
@@ -85,18 +86,53 @@ public class SurveyServiceImpl implements SurveyService {
 
     //To set advised in adviser for Hibernate to be able to persist this relation
     private Survey setSurveyInRespondent(Survey survey) {
-        Respondent respondent;
+        Respondent newRespondent;
+        List<Respondent> respondents = new ArrayList<>();
+        Survey surveyRespondents = getNewSurvey(survey);
+
+        for (Respondent respondent : survey.getRespondents()) {
+            newRespondent = new Respondent();
+
+            newRespondent.setEmail(respondent.getEmail());
+            newRespondent.setIsDone(false);
+            newRespondent.setSurvey(surveyRespondents);
+
+            respondents.add(newRespondent);
+        }
+        surveyRespondents.setRespondents(respondents);
+
+        return surveyRespondents;
+    }
+
+    private Survey getNewSurvey(Survey survey) {
+        Survey newSurvey = new Survey();
+
+        newSurvey.setTitle(survey.getTitle());
+        newSurvey.setDescription(survey.getDescription());
+        newSurvey.setEmail(survey.getEmail());
+
+        return newSurvey;
+    }
+
+    //To set advised in adviser for Hibernate to be able to persist this relation
+    private Survey setSurveyInRespondentv02(Survey survey) {
         List<Respondent> respondents = new ArrayList<>();
 
-        for (Respondent respondent1 : survey.getRespondents()) {
-            respondent = new Respondent();
-            respondent.setEmail(respondent1.getEmail());
+        for (Respondent respondent : survey.getRespondents()) {
             respondent.setSurvey(survey);
-            respondent.setIsDone(false);
             respondents.add(respondent);
         }
         survey.setRespondents(respondents);
 
         return survey;
+    }
+
+    private Answer setSurveyIdInAnswer(Answer answer, Survey survey) {
+        Answer answerSurvey = new Answer();
+
+        answerSurvey.setSurveyId(survey.getId());
+        answerSurvey.setDescription(answer.getDescription());
+
+        return answerSurvey;
     }
 }
