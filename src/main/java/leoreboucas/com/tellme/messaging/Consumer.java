@@ -1,7 +1,5 @@
 package leoreboucas.com.tellme.messaging;
 
-import leoreboucas.com.tellme.dto.RespondentDto;
-import leoreboucas.com.tellme.dto.SurveyDto;
 import leoreboucas.com.tellme.dto.SurveyMessageDto;
 import leoreboucas.com.tellme.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class Consumer {
-
     @Autowired
     private EmailService emailService;
 

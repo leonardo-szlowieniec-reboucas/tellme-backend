@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/surveys")
 public class SurveyController {
-
     private final SurveyService surveyService;
     private final TellmeMapper mapper;
 
@@ -33,7 +32,6 @@ public class SurveyController {
     @Operation(summary = "get survey's information")
     @GetMapping("{id}")
     public SurveyInfoDto getSurveyInfoById(@PathVariable Long id) {
-
         return mapper.surveyToSurveyInfoDto(
                 surveyService.findById(id));
     }
@@ -46,17 +44,13 @@ public class SurveyController {
             @PathVariable Long respondentId,
             @Valid @RequestBody AnswerDto answerDto) {
 
-        surveyService.saveAnswer(
-                surveyId,
-                respondentId,
-                mapper.answerDtoToAnswer(answerDto));
+        surveyService.saveAnswer(surveyId, respondentId, mapper.answerDtoToAnswer(answerDto));
     }
 
     @Operation(summary = "get answers of a specific survey")
-    @GetMapping("{id}/answers")
-    public List<AnswerDto> getAnswersBySurveyId(@PathVariable Long id) {
-
+    @GetMapping("{surveyId}/answers")
+    public List<AnswerDto> getAnswersBySurveyId(@PathVariable Long surveyId) {
         return mapper.answerToAnswerDto(
-                surveyService.findAnswersBySurveyId(id));
+                surveyService.findAnswersBySurveyId(surveyId));
     }
 }

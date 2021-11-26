@@ -30,7 +30,6 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional
     @Override
     public Survey saveSurvey(Survey survey) {
-
         survey = setSurveyInRespondent(survey);
         survey = surveyRepository.save(survey);
         log.info("Created surveyId: " + survey.getId());
@@ -42,14 +41,12 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public Survey findById(Long id) {
-
         return surveyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: " + id + " (findById)"));
     }
 
     @Override
     public List<Answer> findAnswersBySurveyId(Long surveyId) {
-
         Survey survey = surveyRepository.findById(surveyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with surveyId: "+ surveyId + " (findAnswersBySurveyId)"));
 
@@ -63,7 +60,6 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional
     @Override
     public void saveAnswer(Long surveyId, Long respondentId, Answer answer) {
-
         Respondent respondent = respondentRepository.findById(respondentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Respondent not found with respondentId: " + respondentId + " (saveAnswer)"));
 
@@ -78,7 +74,6 @@ public class SurveyServiceImpl implements SurveyService {
             log.info("A respondent answered");
 
             answer.setSurveyId(survey.getId());
-            //TODO to confirm if I need to create a new instance of answer or if I can used the parameter to receive the return.
             answer = answerRepository.save(answer);
             log.info("Saved answer for surveyId: " + answer.getSurveyId() + " and answerId: " + answer.getId());
 
@@ -90,7 +85,6 @@ public class SurveyServiceImpl implements SurveyService {
 
     //To set advised in adviser for Hibernate to be able to persist this relation
     private Survey setSurveyInRespondent(Survey survey) {
-
         Respondent respondent;
         List<Respondent> respondents = new ArrayList<>();
 

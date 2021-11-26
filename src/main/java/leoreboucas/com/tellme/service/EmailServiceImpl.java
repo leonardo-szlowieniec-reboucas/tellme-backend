@@ -1,8 +1,6 @@
 package leoreboucas.com.tellme.service;
 
-import leoreboucas.com.tellme.dto.RespondentDto;
 import leoreboucas.com.tellme.dto.RespondentMessageDto;
-import leoreboucas.com.tellme.dto.SurveyDto;
 import leoreboucas.com.tellme.dto.SurveyMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +12,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class EmailServiceImpl implements EmailService {
-
     private final JavaMailSender javaMailSender;
 
    @Override
     public void emailRespondents(SurveyMessageDto surveyMessageDto) {
-
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom("leonardo1209@gmail.com");
@@ -36,7 +32,6 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void emailResult(SurveyMessageDto surveyMessageDto) {
-
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom("leonardo1209@gmail.com");
